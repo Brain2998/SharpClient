@@ -51,6 +51,10 @@
       <Package>gtk-sharp-3.0</Package>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="gio-sharp, Version=3.0.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Package>gtk-sharp-3.0</Package>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="Mono.Posix" />
   </ItemGroup>
   <ItemGroup>
