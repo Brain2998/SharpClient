@@ -15,12 +15,16 @@ public partial class MainWindow
 
 	private global::Gtk.Button Connect;
 
+	private global::Gtk.ScrolledWindow GtkScrolledWindow;
+
+	private global::Gtk.TextView messageLog;
+
 	protected virtual void Build()
 	{
 		global::Stetic.Gui.Initialize(this);
 		// Widget MainWindow
 		this.Name = "MainWindow";
-		this.Title = global::Mono.Unix.Catalog.GetString("MainWindow");
+		this.Title = global::Mono.Unix.Catalog.GetString("SharpClient");
 		this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 		// Container child MainWindow.Gtk.Container+ContainerChild
 		this.fixed1 = new global::Gtk.Fixed();
@@ -71,14 +75,30 @@ public partial class MainWindow
 		this.fixed1.Add(this.Connect);
 		global::Gtk.Fixed.FixedChild w5 = ((global::Gtk.Fixed.FixedChild)(this.fixed1[this.Connect]));
 		w5.X = 288;
-		w5.Y = 15;
+		w5.Y = 13;
+		// Container child fixed1.Gtk.Fixed+FixedChild
+		this.GtkScrolledWindow = new global::Gtk.ScrolledWindow();
+		this.GtkScrolledWindow.WidthRequest = 350;
+		this.GtkScrolledWindow.HeightRequest = 250;
+		this.GtkScrolledWindow.Name = "GtkScrolledWindow";
+		this.GtkScrolledWindow.ShadowType = ((global::Gtk.ShadowType)(1));
+		// Container child GtkScrolledWindow.Gtk.Container+ContainerChild
+		this.messageLog = new global::Gtk.TextView();
+		this.messageLog.CanFocus = true;
+		this.messageLog.Name = "messageLog";
+		this.messageLog.Editable = false;
+		this.GtkScrolledWindow.Add(this.messageLog);
+		this.fixed1.Add(this.GtkScrolledWindow);
+		global::Gtk.Fixed.FixedChild w7 = ((global::Gtk.Fixed.FixedChild)(this.fixed1[this.GtkScrolledWindow]));
+		w7.X = 7;
+		w7.Y = 82;
 		this.Add(this.fixed1);
 		if ((this.Child != null))
 		{
 			this.Child.ShowAll();
 		}
 		this.DefaultWidth = 400;
-		this.DefaultHeight = 300;
+		this.DefaultHeight = 382;
 		this.Show();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler(this.OnDeleteEvent);
 		this.Connect.Clicked += new global::System.EventHandler(this.OnConnectClicked);
