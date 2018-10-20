@@ -52,11 +52,12 @@ public partial class MainWindow : Gtk.Window
 
     protected void OnDeleteEvent(object sender, DeleteEventArgs a)
     {
+		connection.CloseConnection("0|202");
         Application.Quit();
         a.RetVal = true;
     }
 
-	private void ConnectionFormChange(bool connected)
+	public void ConnectionFormChange(bool connected)
 	{
 		Connected = connected;
 		serverIp.IsEditable = !connected;
@@ -68,7 +69,7 @@ public partial class MainWindow : Gtk.Window
 	{
 		if (Connected)
 		{
-			connection.CloseConnection();
+			connection.CloseConnection("0|202");
 			ConnectionFormChange(false);
 		}
 		else
@@ -79,12 +80,13 @@ public partial class MainWindow : Gtk.Window
 				if (ipCheck.IsMatch(ipAddress))
 				{
 					connection = new Connection(IPAddress.Parse(ipAddress), this);
+					connection.StartConnection();
 					if (connection.Established)
 					    ConnectionFormChange(true);
 				}
 				else
 				{
-					Messages = "Invalid Server IP.";
+					Messages = "Invalid Server IP.\n";
 				}
 			}
 			else
