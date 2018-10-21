@@ -10,6 +10,7 @@
     <property name="MemberName" />
     <property name="Title" translatable="yes">SharpClient</property>
     <property name="WindowPosition">CenterOnParent</property>
+    <property name="Resizable">False</property>
     <signal name="DeleteEvent" handler="OnDeleteEvent" />
     <child>
       <widget class="Gtk.Fixed" id="fixed1">

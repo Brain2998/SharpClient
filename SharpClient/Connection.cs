@@ -15,6 +15,7 @@ namespace SharpClient
 		private static MainWindow ChatForm;
 		private Thread Messaging;
 		public bool Established=false;
+		private bool isRun = false;
 
 		public Connection(IPAddress address, MainWindow form)
         {
@@ -25,6 +26,7 @@ namespace SharpClient
         public void StartConnection()
 		{
 			tcpServer = new TcpClient();
+			isRun = true;
             try
             {
 				tcpServer.ConnectAsync(ipAddress, 1986).Wait(1000);
@@ -47,12 +49,17 @@ namespace SharpClient
                     case "0|103":
                         ChatForm.Messages = "Nickname is already used.\n";
                         break;
+					case "0|101":
                     default:
                         ChatForm.Messages = "Unknown registration error.\n";
                         break;
                 }                
             }
-            catch
+			catch (ThreadAbortException)
+            {
+
+            }
+			catch
             {
                 ChatForm.Messages = "Can not connect to specified server.\n";
             }
@@ -60,45 +67,69 @@ namespace SharpClient
         
         public void CloseConnection(string Reason)
 		{
-			switch (Reason)
+			isRun = false;
+			try
+			{
+				switch (Reason)
+				{
+					case "0|201":
+						ChatForm.Messages = "Server is down.\n";
+						ChatForm.ConnectionFormChange(false);
+						break;
+					case "0|202":
+						ChatForm.Messages = "Disconnected by user request.\n";
+						clientWriter.WriteLine(Reason);
+						clientWriter.Flush();
+						break;
+					case "0|200":
+					default:
+						ChatForm.Messages = "Unknown error during communication.\n";
+						break;
+				}
+				Messaging.Abort();
+				//tcpServer.Close();
+				//clientReader.Close();
+				//clientWriter.Close();
+			}
+			catch (ThreadAbortException)
+			{
+				tcpServer.Close();
+                clientReader.Close();
+                clientWriter.Close();
+			}
+			catch (Exception e)
             {
-				case "0|201":
-                    ChatForm.Messages = "Server is down.\n";
-                    ChatForm.ConnectionFormChange(false);
-                    break;
-                case "0|202":
-                    ChatForm.Messages = "Disconnected by user request\n";
-					clientWriter.WriteLine(Reason);
-                    clientWriter.Flush();
-                    break;
-                default:
-					ChatForm.Messages = "Unknown error during communication. Disconncted\n";
-                    break;
+				ChatForm.Messages = "CloseConnection: " + e.Message+ "\n";
             }
-			Messaging.Abort();
-			tcpServer.Close();         
-			clientReader.Close();
-			clientWriter.Close();
 		}
 
 		private void ReceiveMessages()
 		{
 			string serverMessage;
-
-  		    //while (tcpServer.GetStream().DataAvailable)
-			while (tcpServer.Connected)
+			try
 			{
-				if (tcpServer.GetStream().DataAvailable)
+				//while (tcpServer.GetStream().DataAvailable)
+				while (tcpServer.Connected)
+				//while (isRun)
 				{
-					serverMessage = clientReader.ReadLine();
-					if (serverMessage.StartsWith("0|"))
+					if (tcpServer.GetStream().DataAvailable)
 					{
-						if (serverMessage == "0|201")
+						serverMessage = clientReader.ReadLine();
+						if (serverMessage.StartsWith("0|"))
 						{
-							CloseConnection("0|201");
+							CloseConnection(serverMessage);
 						}
 					}
 				}
+			}
+			catch (ThreadAbortException)
+			{
+				
+			}
+			catch (Exception e)
+			{
+				ChatForm.Messages = "RecieveMessage: " + e.Message+ "\n";
+				CloseConnection("0|200");
 			}
 		}
     }
