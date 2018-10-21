@@ -14,8 +14,7 @@ namespace SharpClient
 		private IPAddress ipAddress;
 		private static MainWindow ChatForm;
 		private Thread Messaging;
-		public bool Established=false;
-		private bool isRun = false;
+		public bool isConnected = false;
 
 		public Connection(IPAddress address, MainWindow form)
         {
@@ -26,7 +25,7 @@ namespace SharpClient
         public void StartConnection()
 		{
 			tcpServer = new TcpClient();
-			isRun = true;
+
             try
             {
 				tcpServer.ConnectAsync(ipAddress, 1986).Wait(1000);
@@ -39,7 +38,7 @@ namespace SharpClient
                 {
                     case "0|100":
                         ChatForm.Messages = "Connected successfully!\n";
-                        Established = true;
+						isConnected = true;
 						Messaging = new Thread(ReceiveMessages);
                         Messaging.Start();
                         break;
@@ -55,19 +54,44 @@ namespace SharpClient
                         break;
                 }                
             }
-			catch (ThreadAbortException)
-            {
-
-            }
 			catch
             {
                 ChatForm.Messages = "Can not connect to specified server.\n";
             }
 		}
+
+		private void ReceiveMessages()
+        {
+            string serverMessage;
+            try
+            {
+                while (isConnected)
+                {
+					if (!tcpServer.GetStream().DataAvailable)
+					{
+						Thread.Sleep(200);
+						continue;
+					}
+                    serverMessage = clientReader.ReadLine();
+                    if (serverMessage.StartsWith("0|"))
+                    {
+                        CloseConnection(serverMessage);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                ChatForm.Messages = "RecieveMessage: " + e.Message + "\n";
+				if (isConnected)
+				{
+					CloseConnection("0|200");
+				}
+            }
+        }
         
         public void CloseConnection(string Reason)
 		{
-			isRun = false;
+			isConnected = false;
 			try
 			{
 				switch (Reason)
@@ -86,51 +110,16 @@ namespace SharpClient
 						ChatForm.Messages = "Unknown error during communication.\n";
 						break;
 				}
-				Messaging.Abort();
-				//tcpServer.Close();
-				//clientReader.Close();
-				//clientWriter.Close();
-			}
-			catch (ThreadAbortException)
-			{
+				isConnected = false;
+				Messaging.Join();
 				tcpServer.Close();
-                clientReader.Close();
-                clientWriter.Close();
+				clientReader.Close();
+				clientWriter.Close();
 			}
 			catch (Exception e)
             {
 				ChatForm.Messages = "CloseConnection: " + e.Message+ "\n";
             }
-		}
-
-		private void ReceiveMessages()
-		{
-			string serverMessage;
-			try
-			{
-				//while (tcpServer.GetStream().DataAvailable)
-				while (tcpServer.Connected)
-				//while (isRun)
-				{
-					if (tcpServer.GetStream().DataAvailable)
-					{
-						serverMessage = clientReader.ReadLine();
-						if (serverMessage.StartsWith("0|"))
-						{
-							CloseConnection(serverMessage);
-						}
-					}
-				}
-			}
-			catch (ThreadAbortException)
-			{
-				
-			}
-			catch (Exception e)
-			{
-				ChatForm.Messages = "RecieveMessage: " + e.Message+ "\n";
-				CloseConnection("0|200");
-			}
-		}
+		}      
     }
 }

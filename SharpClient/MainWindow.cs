@@ -1,13 +1,13 @@
 ﻿using System;
 using Gtk;
 using System.Net;
-using System.Text.RegularExpressions;
 using SharpClient;
 
 public partial class MainWindow : Gtk.Window
 {
 	private bool Connected = false;
 	private Connection connection;
+	private IPAddress address;
 
 	public string ipAddress
 	{
@@ -52,7 +52,10 @@ public partial class MainWindow : Gtk.Window
 
     protected void OnDeleteEvent(object sender, DeleteEventArgs a)
     {
-		connection.CloseConnection("0|202");
+		if (connection.isConnected)
+		{
+			connection.CloseConnection("0|202");
+		}
         Application.Quit();
         a.RetVal = true;
     }
@@ -74,14 +77,13 @@ public partial class MainWindow : Gtk.Window
 		}
 		else
 		{
-			Regex ipCheck = new Regex(@"(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})");
 			if (Username != "")
 			{
-				if (ipCheck.IsMatch(ipAddress))
+				if (IPAddress.TryParse(ipAddress, out address))
 				{
-					connection = new Connection(IPAddress.Parse(ipAddress), this);
+					connection = new Connection(address, this);
 					connection.StartConnection();
-					if (connection.Established)
+					if (connection.isConnected)
 					    ConnectionFormChange(true);
 				}
 				else

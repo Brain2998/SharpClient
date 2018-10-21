@@ -1,6 +1,5 @@
 ﻿using System;
 using Gtk;
-using System.Threading;
 
 namespace SharpClient
 {
@@ -16,10 +15,6 @@ namespace SharpClient
 				win.Show();
 				Application.Run();
 			}
-			catch (ThreadAbortException)
-            {
-
-            }
 			catch (Exception err)
             {
 				win.Messages = "Main: " + err.Message + "\n";
