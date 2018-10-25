@@ -12,7 +12,7 @@ public partial class MainWindow : Gtk.Window
 	public string ipAddress
 	{
 		get
-		{
+		{			
 			return serverIp.Text;
 		}
 		set

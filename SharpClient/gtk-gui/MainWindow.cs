@@ -3,21 +3,27 @@
 
 public partial class MainWindow
 {
-	private global::Gtk.Fixed fixed1;
-
-	private global::Gtk.Label serverLabel;
-
-	private global::Gtk.Label nicknameLabel;
-
-	private global::Gtk.Entry serverIp;
-
-	private global::Gtk.Entry Nickname;
+	private global::Gtk.Table table1;
 
 	private global::Gtk.Button Connect;
 
 	private global::Gtk.ScrolledWindow GtkScrolledWindow;
 
 	private global::Gtk.TextView messageLog;
+
+	private global::Gtk.ScrolledWindow GtkScrolledWindow1;
+
+	private global::Gtk.TextView Message;
+
+	private global::Gtk.Entry Nickname;
+
+	private global::Gtk.Label nicknameLabel;
+
+	private global::Gtk.Button SendMessage;
+
+	private global::Gtk.Entry serverIp;
+
+	private global::Gtk.Label serverLabel;
 
 	protected virtual void Build()
 	{
@@ -26,80 +32,114 @@ public partial class MainWindow
 		this.Name = "MainWindow";
 		this.Title = global::Mono.Unix.Catalog.GetString("SharpClient");
 		this.WindowPosition = ((global::Gtk.WindowPosition)(4));
-		this.Resizable = false;
 		// Container child MainWindow.Gtk.Container+ContainerChild
-		this.fixed1 = new global::Gtk.Fixed();
-		this.fixed1.Name = "fixed1";
-		this.fixed1.HasWindow = false;
-		// Container child fixed1.Gtk.Fixed+FixedChild
-		this.serverLabel = new global::Gtk.Label();
-		this.serverLabel.Name = "serverLabel";
-		this.serverLabel.LabelProp = global::Mono.Unix.Catalog.GetString("Server IP:");
-		this.fixed1.Add(this.serverLabel);
-		global::Gtk.Fixed.FixedChild w1 = ((global::Gtk.Fixed.FixedChild)(this.fixed1[this.serverLabel]));
-		w1.X = 16;
-		w1.Y = 13;
-		// Container child fixed1.Gtk.Fixed+FixedChild
-		this.nicknameLabel = new global::Gtk.Label();
-		this.nicknameLabel.Name = "nicknameLabel";
-		this.nicknameLabel.LabelProp = global::Mono.Unix.Catalog.GetString("Nickname:");
-		this.fixed1.Add(this.nicknameLabel);
-		global::Gtk.Fixed.FixedChild w2 = ((global::Gtk.Fixed.FixedChild)(this.fixed1[this.nicknameLabel]));
-		w2.X = 9;
-		w2.Y = 50;
-		// Container child fixed1.Gtk.Fixed+FixedChild
-		this.serverIp = new global::Gtk.Entry();
-		this.serverIp.CanFocus = true;
-		this.serverIp.Name = "serverIp";
-		this.serverIp.IsEditable = true;
-		this.serverIp.InvisibleChar = '•';
-		this.fixed1.Add(this.serverIp);
-		global::Gtk.Fixed.FixedChild w3 = ((global::Gtk.Fixed.FixedChild)(this.fixed1[this.serverIp]));
-		w3.X = 101;
-		w3.Y = 13;
-		// Container child fixed1.Gtk.Fixed+FixedChild
-		this.Nickname = new global::Gtk.Entry();
-		this.Nickname.CanFocus = true;
-		this.Nickname.Name = "Nickname";
-		this.Nickname.IsEditable = true;
-		this.Nickname.InvisibleChar = '•';
-		this.fixed1.Add(this.Nickname);
-		global::Gtk.Fixed.FixedChild w4 = ((global::Gtk.Fixed.FixedChild)(this.fixed1[this.Nickname]));
-		w4.X = 101;
-		w4.Y = 50;
-		// Container child fixed1.Gtk.Fixed+FixedChild
+		this.table1 = new global::Gtk.Table(((uint)(10)), ((uint)(4)), true);
+		this.table1.Name = "table1";
+		this.table1.RowSpacing = ((uint)(6));
+		this.table1.ColumnSpacing = ((uint)(6));
+		// Container child table1.Gtk.Table+TableChild
 		this.Connect = new global::Gtk.Button();
 		this.Connect.CanFocus = true;
 		this.Connect.Name = "Connect";
 		this.Connect.UseUnderline = true;
 		this.Connect.Label = global::Mono.Unix.Catalog.GetString("Connect");
-		this.fixed1.Add(this.Connect);
-		global::Gtk.Fixed.FixedChild w5 = ((global::Gtk.Fixed.FixedChild)(this.fixed1[this.Connect]));
-		w5.X = 288;
-		w5.Y = 13;
-		// Container child fixed1.Gtk.Fixed+FixedChild
+		this.table1.Add(this.Connect);
+		global::Gtk.Table.TableChild w1 = ((global::Gtk.Table.TableChild)(this.table1[this.Connect]));
+		w1.BottomAttach = ((uint)(2));
+		w1.LeftAttach = ((uint)(3));
+		w1.RightAttach = ((uint)(4));
+		// Container child table1.Gtk.Table+TableChild
 		this.GtkScrolledWindow = new global::Gtk.ScrolledWindow();
-		this.GtkScrolledWindow.WidthRequest = 350;
-		this.GtkScrolledWindow.HeightRequest = 250;
 		this.GtkScrolledWindow.Name = "GtkScrolledWindow";
+		this.GtkScrolledWindow.HscrollbarPolicy = ((global::Gtk.PolicyType)(2));
 		this.GtkScrolledWindow.ShadowType = ((global::Gtk.ShadowType)(1));
 		// Container child GtkScrolledWindow.Gtk.Container+ContainerChild
 		this.messageLog = new global::Gtk.TextView();
 		this.messageLog.CanFocus = true;
 		this.messageLog.Name = "messageLog";
-		this.messageLog.Editable = false;
 		this.GtkScrolledWindow.Add(this.messageLog);
-		this.fixed1.Add(this.GtkScrolledWindow);
-		global::Gtk.Fixed.FixedChild w7 = ((global::Gtk.Fixed.FixedChild)(this.fixed1[this.GtkScrolledWindow]));
-		w7.X = 7;
-		w7.Y = 82;
-		this.Add(this.fixed1);
+		this.table1.Add(this.GtkScrolledWindow);
+		global::Gtk.Table.TableChild w3 = ((global::Gtk.Table.TableChild)(this.table1[this.GtkScrolledWindow]));
+		w3.TopAttach = ((uint)(2));
+		w3.BottomAttach = ((uint)(8));
+		w3.RightAttach = ((uint)(4));
+		// Container child table1.Gtk.Table+TableChild
+		this.GtkScrolledWindow1 = new global::Gtk.ScrolledWindow();
+		this.GtkScrolledWindow1.Name = "GtkScrolledWindow1";
+		this.GtkScrolledWindow1.HscrollbarPolicy = ((global::Gtk.PolicyType)(2));
+		this.GtkScrolledWindow1.ShadowType = ((global::Gtk.ShadowType)(1));
+		// Container child GtkScrolledWindow1.Gtk.Container+ContainerChild
+		this.Message = new global::Gtk.TextView();
+		this.Message.CanFocus = true;
+		this.Message.Name = "Message";
+		this.GtkScrolledWindow1.Add(this.Message);
+		this.table1.Add(this.GtkScrolledWindow1);
+		global::Gtk.Table.TableChild w5 = ((global::Gtk.Table.TableChild)(this.table1[this.GtkScrolledWindow1]));
+		w5.TopAttach = ((uint)(8));
+		w5.BottomAttach = ((uint)(10));
+		w5.RightAttach = ((uint)(3));
+		w5.XOptions = ((global::Gtk.AttachOptions)(4));
+		// Container child table1.Gtk.Table+TableChild
+		this.Nickname = new global::Gtk.Entry();
+		this.Nickname.CanFocus = true;
+		this.Nickname.Name = "Nickname";
+		this.Nickname.IsEditable = true;
+		this.Nickname.InvisibleChar = '•';
+		this.table1.Add(this.Nickname);
+		global::Gtk.Table.TableChild w6 = ((global::Gtk.Table.TableChild)(this.table1[this.Nickname]));
+		w6.TopAttach = ((uint)(1));
+		w6.BottomAttach = ((uint)(2));
+		w6.LeftAttach = ((uint)(1));
+		w6.RightAttach = ((uint)(3));
+		// Container child table1.Gtk.Table+TableChild
+		this.nicknameLabel = new global::Gtk.Label();
+		this.nicknameLabel.Name = "nicknameLabel";
+		this.nicknameLabel.Xalign = 1F;
+		this.nicknameLabel.LabelProp = global::Mono.Unix.Catalog.GetString("Nickname:");
+		this.table1.Add(this.nicknameLabel);
+		global::Gtk.Table.TableChild w7 = ((global::Gtk.Table.TableChild)(this.table1[this.nicknameLabel]));
+		w7.TopAttach = ((uint)(1));
+		w7.BottomAttach = ((uint)(2));
+		w7.XOptions = ((global::Gtk.AttachOptions)(4));
+		w7.YOptions = ((global::Gtk.AttachOptions)(4));
+		// Container child table1.Gtk.Table+TableChild
+		this.SendMessage = new global::Gtk.Button();
+		this.SendMessage.CanFocus = true;
+		this.SendMessage.Name = "SendMessage";
+		this.SendMessage.UseUnderline = true;
+		this.SendMessage.Label = global::Mono.Unix.Catalog.GetString("Send");
+		this.table1.Add(this.SendMessage);
+		global::Gtk.Table.TableChild w8 = ((global::Gtk.Table.TableChild)(this.table1[this.SendMessage]));
+		w8.TopAttach = ((uint)(8));
+		w8.BottomAttach = ((uint)(10));
+		w8.LeftAttach = ((uint)(3));
+		w8.RightAttach = ((uint)(4));
+		// Container child table1.Gtk.Table+TableChild
+		this.serverIp = new global::Gtk.Entry();
+		this.serverIp.CanFocus = true;
+		this.serverIp.Name = "serverIp";
+		this.serverIp.IsEditable = true;
+		this.serverIp.InvisibleChar = '•';
+		this.table1.Add(this.serverIp);
+		global::Gtk.Table.TableChild w9 = ((global::Gtk.Table.TableChild)(this.table1[this.serverIp]));
+		w9.LeftAttach = ((uint)(1));
+		w9.RightAttach = ((uint)(3));
+		// Container child table1.Gtk.Table+TableChild
+		this.serverLabel = new global::Gtk.Label();
+		this.serverLabel.Name = "serverLabel";
+		this.serverLabel.Xalign = 1F;
+		this.serverLabel.LabelProp = global::Mono.Unix.Catalog.GetString("Server IP:");
+		this.table1.Add(this.serverLabel);
+		global::Gtk.Table.TableChild w10 = ((global::Gtk.Table.TableChild)(this.table1[this.serverLabel]));
+		w10.XOptions = ((global::Gtk.AttachOptions)(4));
+		w10.YOptions = ((global::Gtk.AttachOptions)(4));
+		this.Add(this.table1);
 		if ((this.Child != null))
 		{
 			this.Child.ShowAll();
 		}
-		this.DefaultWidth = 400;
-		this.DefaultHeight = 382;
+		this.DefaultWidth = 326;
+		this.DefaultHeight = 384;
 		this.Show();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler(this.OnDeleteEvent);
 		this.Connect.Clicked += new global::System.EventHandler(this.OnConnectClicked);
