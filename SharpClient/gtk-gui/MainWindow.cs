@@ -19,7 +19,7 @@ public partial class MainWindow
 
 	private global::Gtk.Label nicknameLabel;
 
-	private global::Gtk.Button SendMessage;
+	private global::Gtk.Button SendMessageButton;
 
 	private global::Gtk.Entry serverIp;
 
@@ -72,6 +72,7 @@ public partial class MainWindow
 		this.Message = new global::Gtk.TextView();
 		this.Message.CanFocus = true;
 		this.Message.Name = "Message";
+		this.Message.Editable = false;
 		this.GtkScrolledWindow1.Add(this.Message);
 		this.table1.Add(this.GtkScrolledWindow1);
 		global::Gtk.Table.TableChild w5 = ((global::Gtk.Table.TableChild)(this.table1[this.GtkScrolledWindow1]));
@@ -103,13 +104,13 @@ public partial class MainWindow
 		w7.XOptions = ((global::Gtk.AttachOptions)(4));
 		w7.YOptions = ((global::Gtk.AttachOptions)(4));
 		// Container child table1.Gtk.Table+TableChild
-		this.SendMessage = new global::Gtk.Button();
-		this.SendMessage.CanFocus = true;
-		this.SendMessage.Name = "SendMessage";
-		this.SendMessage.UseUnderline = true;
-		this.SendMessage.Label = global::Mono.Unix.Catalog.GetString("Send");
-		this.table1.Add(this.SendMessage);
-		global::Gtk.Table.TableChild w8 = ((global::Gtk.Table.TableChild)(this.table1[this.SendMessage]));
+		this.SendMessageButton = new global::Gtk.Button();
+		this.SendMessageButton.CanFocus = true;
+		this.SendMessageButton.Name = "SendMessageButton";
+		this.SendMessageButton.UseUnderline = true;
+		this.SendMessageButton.Label = global::Mono.Unix.Catalog.GetString("Send");
+		this.table1.Add(this.SendMessageButton);
+		global::Gtk.Table.TableChild w8 = ((global::Gtk.Table.TableChild)(this.table1[this.SendMessageButton]));
 		w8.TopAttach = ((uint)(8));
 		w8.BottomAttach = ((uint)(10));
 		w8.LeftAttach = ((uint)(3));
@@ -142,6 +143,8 @@ public partial class MainWindow
 		this.DefaultHeight = 384;
 		this.Show();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler(this.OnDeleteEvent);
+		this.SendMessageButton.Clicked += new global::System.EventHandler(this.OnSendMessageButtonClicked);
+		this.Message.KeyPressEvent += new global::Gtk.KeyPressEventHandler(this.OnMessageKeyPressEvent);
 		this.Connect.Clicked += new global::System.EventHandler(this.OnConnectClicked);
 	}
 }

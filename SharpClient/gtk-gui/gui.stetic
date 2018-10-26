@@ -78,7 +78,9 @@
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="ShowScrollbars">True</property>
+                <property name="Editable">False</property>
                 <property name="Text" translatable="yes" />
+                <signal name="KeyPressEvent" handler="OnMessageKeyPressEvent" />
               </widget>
             </child>
           </widget>
@@ -138,12 +140,13 @@
           </packing>
         </child>
         <child>
-          <widget class="Gtk.Button" id="SendMessage">
+          <widget class="Gtk.Button" id="SendMessageButton">
             <property name="MemberName" />
             <property name="CanFocus">True</property>
             <property name="Type">TextOnly</property>
             <property name="Label" translatable="yes">Send</property>
             <property name="UseUnderline">True</property>
+            <signal name="Clicked" handler="OnSendMessageButtonClicked" />
           </widget>
           <packing>
             <property name="TopAttach">8</property>

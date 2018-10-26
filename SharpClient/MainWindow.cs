@@ -41,7 +41,19 @@ public partial class MainWindow : Gtk.Window
 		}
 		set
 		{
-			messageLog.Buffer.Text += value;
+			messageLog.Buffer.Text += value+"\n";
+		}
+	}
+
+    public string MessageToSend
+	{
+		get
+		{
+			return Message.Buffer.Text;
+		}
+		set
+		{
+			Message.Buffer.Text = value;
 		}
 	}
 
@@ -52,7 +64,7 @@ public partial class MainWindow : Gtk.Window
 
     protected void OnDeleteEvent(object sender, DeleteEventArgs a)
     {
-		if (connection.isConnected)
+		if (Connected)
 		{
 			connection.CloseConnection("0|202");
 		}
@@ -64,8 +76,9 @@ public partial class MainWindow : Gtk.Window
 	{
 		Connected = connected;
 		serverIp.IsEditable = !connected;
-		Nickname.IsEditable = !connected;
+		Nickname.IsEditable = !connected;      
 		Connect.Label= connected ? "Disconnect" : "Connect";
+		Message.Editable = connected;
 	}
 
 	protected void OnConnectClicked(object sender, EventArgs e)
@@ -88,13 +101,39 @@ public partial class MainWindow : Gtk.Window
 				}
 				else
 				{
-					Messages = "Invalid Server IP.\n";
+					Messages = "Invalid Server IP.";
 				}
 			}
 			else
 			{
-				Messages = "Invalid nickname.\n";
+				Messages = "Invalid nickname.";
 			}
+		}
+	}
+
+    private void SendMessage()
+	{
+		if (Connected)
+		{
+			if (MessageToSend.Length > 0)
+			{
+				connection.SendMessage(MessageToSend);
+				MessageToSend = "";
+			}
+		}
+	}
+
+	protected void OnSendMessageButtonClicked(object sender, EventArgs e)
+	{
+		SendMessage();
+	}   
+
+	[GLib.ConnectBefore]
+	protected void OnMessageKeyPressEvent(object o, KeyPressEventArgs args)
+	{
+		if (args.Event.Key==Gdk.Key.Return)
+		{
+			SendMessage();
 		}
 	}
 }
