@@ -5,6 +5,7 @@
   </configuration>
   <import>
     <widget-library name="../bin/Debug/SharpClient.exe" internal="true" />
+    <widget-library name="../../../../../../../../usr/lib/mono/gac/glade-sharp/2.12.0.0__35e10195dab3c99f/glade-sharp.dll" />
   </import>
   <widget class="Gtk.Window" id="MainWindow" design-size="326 384">
     <property name="MemberName" />

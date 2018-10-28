@@ -128,10 +128,13 @@ namespace SharpClient
 						break;
 					case "0|202":
 						ChatForm.Messages = "Disconnected by user request.";
-						clientWriter.WriteLine(Reason);
-						clientWriter.Flush();
+						SendMessage(Reason);
 						break;
-					case "0|200":
+                    case "0|203":
+                        ChatForm.Messages = "Disconnected by server.";
+                        ChatForm.ConnectionFormChange(false);
+                        break;
+                    case "0|200":
 					default:
 						ChatForm.Messages = "Unknown error during communication.";
 						break;
