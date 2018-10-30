@@ -36,26 +36,26 @@ namespace SharpClient
                 switch (serverResponse)
                 {
                     case "0|100":
-                        ChatForm.Messages = "Connected successfully!";
+                        ChatForm.ShowMessage("Connected successfully!");
 						isConnected = true;
 						Messaging = new Thread(ReceiveMessages);
                         Messaging.Start();
                         break;
 					case "0|102":
-						ChatForm.Messages = "Invalid nickname.";
+                        ChatForm.ShowMessage("Invalid nickname.");
 						break;
                     case "0|103":
-                        ChatForm.Messages = "Nickname is already used.";
+                        ChatForm.ShowMessage("Nickname is already used.");
                         break;
 					case "0|101":
                     default:
-                        ChatForm.Messages = "Unknown registration error.";
+                        ChatForm.ShowMessage("Unknown registration error.");
                         break;
                 }                
             }
 			catch
             {
-                ChatForm.Messages = "Can not connect to specified server.";
+                ChatForm.ShowMessage("Can not connect to specified server.");
             }
 		}
 
@@ -72,19 +72,29 @@ namespace SharpClient
 						continue;
 					}
                     serverMessage = clientReader.ReadLine();
-                    if (serverMessage.StartsWith("0|"))
+                    switch (serverMessage.Substring(0, 2))
                     {
-                        CloseConnection(serverMessage);
+                        case "0|":
+                            CloseConnection(serverMessage);
+                            break;
+                        case "1|":
+                            int stickerIndex = serverMessage.IndexOf("2|");
+                            if (stickerIndex>0)
+                            {
+                                ChatForm.ShowMessage(serverMessage.Substring(2, stickerIndex-2));
+                                ChatForm.ShowSticker(serverMessage.Substring(stickerIndex + 2));
+                            }
+                            else
+                            {
+                                ChatForm.ShowMessage(serverMessage.Substring(2));
+                            }
+                            break;
                     }
-					if (serverMessage.StartsWith("1|"))
-					{
-						ChatForm.Messages = serverMessage.Substring(2);
-					}
                 }
             }
             catch (Exception e)
             {
-                ChatForm.Messages = "RecieveMessage: " + e.Message;
+                ChatForm.ShowMessage("RecieveMessage: " + e.Message);
 				if (isConnected)
 				{
 					CloseConnection("0|200");
@@ -98,20 +108,13 @@ namespace SharpClient
 			{
 				if (Message.Length > 0)
 				{
-					if (Message.StartsWith("0|"))
-					{
-						clientWriter.WriteLine(Message);
-					}
-					else
-					{
-						clientWriter.WriteLine("1|" + Message);
-					}
-					clientWriter.Flush();
+                    clientWriter.WriteLine(Message);
+                    clientWriter.Flush();
 				}
 			}
 			catch (Exception e)
 			{
-				ChatForm.Messages = "Send message: " + e.Message;
+                ChatForm.ShowMessage("Send message: " + e.Message);
 			}
 		}
         
@@ -123,20 +126,20 @@ namespace SharpClient
 				switch (Reason)
 				{
 					case "0|201":
-						ChatForm.Messages = "Server is down.";
+                        ChatForm.ShowMessage("Server is down.");
 						ChatForm.ConnectionFormChange(false);
 						break;
 					case "0|202":
-						ChatForm.Messages = "Disconnected by user request.";
+                        ChatForm.ShowMessage("Disconnected by user request.");
 						SendMessage(Reason);
 						break;
                     case "0|203":
-                        ChatForm.Messages = "Disconnected by server.";
+                        ChatForm.ShowMessage("Disconnected by server.");
                         ChatForm.ConnectionFormChange(false);
                         break;
                     case "0|200":
 					default:
-						ChatForm.Messages = "Unknown error during communication.";
+                        ChatForm.ShowMessage("Unknown error during communication.");
 						break;
 				}
 				isConnected = false;
@@ -147,7 +150,7 @@ namespace SharpClient
 			}
 			catch (Exception e)
             {
-				ChatForm.Messages = "CloseConnection: " + e.Message;
+                ChatForm.ShowMessage("CloseConnection: " + e.Message);
             }
 		}      
     }

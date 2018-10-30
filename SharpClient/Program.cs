@@ -6,6 +6,7 @@ namespace SharpClient
     class MainClass
     {
 		private static MainWindow win;
+
         public static void Main(string[] args)
         {
 			Application.Init();

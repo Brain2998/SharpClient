@@ -5,11 +5,11 @@ using SharpClient;
 
 public partial class MainWindow : Gtk.Window
 {
-	private bool Connected = false;
-	private Connection connection;
+	public bool Connected = false;
+    public Connection connection;
 	private IPAddress address;
 
-	public string ipAddress
+    public string ipAddress
 	{
 		get
 		{			
@@ -33,17 +33,17 @@ public partial class MainWindow : Gtk.Window
 		}
 	}
 
-	public string Messages
+	public void ShowMessage(string message)
 	{
-		get
-		{
-			return messageLog.Buffer.Text;
-		}
-		set
-		{
-			messageLog.Buffer.Text += value+"\n";
-		}
+        messageBox.PackStart(new TextMessage(message), false, false, 0);
+        messageBox.ShowAll();
 	}
+
+    public void ShowSticker(string sticker)
+    {
+        messageBox.PackStart(new Sticker(PixStickers.Stickers[sticker]), false, false, 0);
+        messageBox.ShowAll();
+    }
 
     public string MessageToSend
 	{
@@ -101,12 +101,12 @@ public partial class MainWindow : Gtk.Window
 				}
 				else
 				{
-					Messages = "Invalid Server IP.";
+                    ShowMessage("Invalid Server IP.");
 				}
 			}
 			else
 			{
-				Messages = "Invalid nickname.";
+                ShowMessage("Invalid nickname.");
 			}
 		}
 	}
@@ -117,7 +117,7 @@ public partial class MainWindow : Gtk.Window
 		{
 			if (MessageToSend.Length > 0)
 			{
-				connection.SendMessage(MessageToSend);
+				connection.SendMessage("1|"+MessageToSend);
 				MessageToSend = "";
 			}
 		}
@@ -136,4 +136,16 @@ public partial class MainWindow : Gtk.Window
 			SendMessage();
 		}
 	}
+
+    protected void OnSendStickerButtonClicked(object sender, EventArgs e)
+    {
+        try
+        {
+            StickerWindow stickerWindow = new StickerWindow("Select sticker", this);
+        }
+        catch (Exception err)
+        {
+            ShowMessage("StickerButton: " + err.Message+" "+err.InnerException);
+        }
+    }
 }
