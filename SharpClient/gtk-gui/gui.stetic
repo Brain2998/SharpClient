@@ -24,6 +24,8 @@
           <widget class="Gtk.ScrolledWindow" id="chatWindow">
             <property name="MemberName" />
             <property name="CanFocus">True</property>
+            <property name="VscrollbarPolicy">Always</property>
+            <property name="HscrollbarPolicy">Never</property>
             <property name="ShadowType">In</property>
             <child>
               <widget class="Gtk.Viewport" id="GtkViewport">
@@ -94,7 +96,9 @@
                 <property name="ShowScrollbars">True</property>
                 <property name="Editable">False</property>
                 <property name="Text" translatable="yes" />
+                <property name="WrapMode">WordChar</property>
                 <signal name="KeyPressEvent" handler="OnMessageKeyPressEvent" />
+                <signal name="KeyReleaseEvent" handler="OnMessageKeyReleaseEvent" />
               </widget>
             </child>
           </widget>

@@ -76,6 +76,8 @@ namespace SharpClient
             events[2].Add(NotLikeThis);
             Sticker HeyGuys = new Sticker(PixStickers.Stickers["HeyGuys"], "HeyGuys");
             events[3].Add(HeyGuys);
+            stickerTable.RowSpacing = 15;
+            stickerTable.ColumnSpacing = 15;
             Add(stickerTable);
             ShowAll();
         }

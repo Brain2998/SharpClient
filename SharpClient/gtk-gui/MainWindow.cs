@@ -43,6 +43,8 @@ public partial class MainWindow
 		this.chatWindow = new global::Gtk.ScrolledWindow();
 		this.chatWindow.CanFocus = true;
 		this.chatWindow.Name = "chatWindow";
+		this.chatWindow.VscrollbarPolicy = ((global::Gtk.PolicyType)(0));
+		this.chatWindow.HscrollbarPolicy = ((global::Gtk.PolicyType)(2));
 		this.chatWindow.ShadowType = ((global::Gtk.ShadowType)(1));
 		// Container child chatWindow.Gtk.Container+ContainerChild
 		global::Gtk.Viewport w1 = new global::Gtk.Viewport();
@@ -79,6 +81,7 @@ public partial class MainWindow
 		this.Message.CanFocus = true;
 		this.Message.Name = "Message";
 		this.Message.Editable = false;
+		this.Message.WrapMode = ((global::Gtk.WrapMode)(3));
 		this.GtkScrolledWindow1.Add(this.Message);
 		this.table1.Add(this.GtkScrolledWindow1);
 		global::Gtk.Table.TableChild w7 = ((global::Gtk.Table.TableChild)(this.table1[this.GtkScrolledWindow1]));
@@ -166,6 +169,7 @@ public partial class MainWindow
 		this.sendStickerButton.Clicked += new global::System.EventHandler(this.OnSendStickerButtonClicked);
 		this.SendMessageButton.Clicked += new global::System.EventHandler(this.OnSendMessageButtonClicked);
 		this.Message.KeyPressEvent += new global::Gtk.KeyPressEventHandler(this.OnMessageKeyPressEvent);
+		this.Message.KeyReleaseEvent += new global::Gtk.KeyReleaseEventHandler(this.OnMessageKeyReleaseEvent);
 		this.Connect.Clicked += new global::System.EventHandler(this.OnConnectClicked);
 	}
 }

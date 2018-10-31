@@ -2,64 +2,90 @@
 using Gtk;
 using System.Net;
 using SharpClient;
+using System.Threading.Tasks;
 
 public partial class MainWindow : Gtk.Window
 {
-	public bool Connected = false;
+    public bool Connected = false;
     public Connection connection;
-	private IPAddress address;
+    private IPAddress address;
+    private Adjustment adjustment = new Adjustment(0xffffffff, 0, 0xffffffff, 0, 0, 0);
 
     public string ipAddress
-	{
-		get
-		{			
-			return serverIp.Text;
-		}
-		set
-		{
-			serverIp.Text = value;
-		}
-	}
+    {
+        get
+        {
+            return serverIp.Text;
+        }
+        set
+        {
+            serverIp.Text = value;
+        }
+    }
 
-	public string Username
-	{
-		get
-		{
-			return Nickname.Text;
-		}
-		set
-		{
-			Nickname.Text = value;
-		}
-	}
+    public string Username
+    {
+        get
+        {
+            return Nickname.Text;
+        }
+        set
+        {
+            Nickname.Text = value;
+        }
+    }
 
-	public void ShowMessage(string message)
-	{
+
+
+    public async void ShowMessage(string message)
+    {
         messageBox.PackStart(new TextMessage(message), false, false, 0);
         messageBox.ShowAll();
-	}
+        await PutTaskDelay();
+        ScrollDown();
+    }
 
-    public void ShowSticker(string sticker)
+    public async void ShowSticker(string sticker)
     {
         messageBox.PackStart(new Sticker(PixStickers.Stickers[sticker]), false, false, 0);
         messageBox.ShowAll();
+        await PutTaskDelay();
+        ScrollDown();
+    }
+
+    private void ScrollDown()
+    {
+        Adjustment chatAdjustment = chatWindow.Vadjustment;
+        chatWindow.Vadjustment.Value = chatAdjustment.Upper - chatAdjustment.PageSize;
+    }
+
+    async Task PutTaskDelay()
+    {
+        await Task.Delay(100);
     }
 
     public string MessageToSend
-	{
-		get
-		{
-			return Message.Buffer.Text;
-		}
-		set
-		{
-			Message.Buffer.Text = value;
-		}
-	}
+    {
+        get
+        {
+            return Message.Buffer.Text;
+        }
+        set
+        {
+            Message.Buffer.Text = value;
+        }
+    }
 
     public MainWindow() : base(Gtk.WindowType.Toplevel)
     {
         Build();
+        GLib.ExceptionManager.UnhandledException += logException;
+    }
+
+    void logException(GLib.UnhandledExceptionArgs args)
+    {
+        args.ExitApplication = false;
+        ShowMessage("GlobalException: " + args.ExceptionObject.ToString());
     }
 
     protected void OnDeleteEvent(object sender, DeleteEventArgs a)
@@ -68,7 +94,7 @@ public partial class MainWindow : Gtk.Window
 		{
 			connection.CloseConnection("0|202");
 		}
-        Application.Quit();
+        Environment.Exit(0);
         a.RetVal = true;
     }
 
@@ -118,7 +144,6 @@ public partial class MainWindow : Gtk.Window
 			if (MessageToSend.Length > 0)
 			{
 				connection.SendMessage("1|"+MessageToSend);
-				MessageToSend = "";
 			}
 		}
 	}
@@ -126,16 +151,25 @@ public partial class MainWindow : Gtk.Window
 	protected void OnSendMessageButtonClicked(object sender, EventArgs e)
 	{
 		SendMessage();
-	}   
+        MessageToSend = "";
+    }   
 
 	[GLib.ConnectBefore]
 	protected void OnMessageKeyPressEvent(object o, KeyPressEventArgs args)
 	{
-		if (args.Event.Key==Gdk.Key.Return)
+		if (args.Event.Key==Gdk.Key.Return || args.Event.Key == Gdk.Key.KP_Enter)
 		{
 			SendMessage();
 		}
 	}
+
+    protected void OnMessageKeyReleaseEvent(object o, KeyReleaseEventArgs args)
+    {
+        if (args.Event.Key == Gdk.Key.Return || args.Event.Key==Gdk.Key.KP_Enter)
+        {
+            MessageToSend = "";
+        }
+    }
 
     protected void OnSendStickerButtonClicked(object sender, EventArgs e)
     {
