@@ -35,7 +35,7 @@ public partial class MainWindow
 		this.Title = global::Mono.Unix.Catalog.GetString("SharpClient");
 		this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 		// Container child MainWindow.Gtk.Container+ContainerChild
-		this.table1 = new global::Gtk.Table(((uint)(10)), ((uint)(4)), true);
+		this.table1 = new global::Gtk.Table(((uint)(10)), ((uint)(4)), false);
 		this.table1.Name = "table1";
 		this.table1.RowSpacing = ((uint)(6));
 		this.table1.ColumnSpacing = ((uint)(6));

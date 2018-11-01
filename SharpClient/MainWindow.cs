@@ -3,6 +3,7 @@ using Gtk;
 using System.Net;
 using SharpClient;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 public partial class MainWindow : Gtk.Window
 {
@@ -10,6 +11,7 @@ public partial class MainWindow : Gtk.Window
     public Connection connection;
     private IPAddress address;
     private Adjustment adjustment = new Adjustment(0xffffffff, 0, 0xffffffff, 0, 0, 0);
+    private Regex messageRegex = new Regex("[\t\r\n]");
 
     public string ipAddress
     {
@@ -141,9 +143,16 @@ public partial class MainWindow : Gtk.Window
 	{
 		if (Connected)
 		{
-			if (MessageToSend.Length > 0)
+            if (MessageToSend.Length > 0)
 			{
-				connection.SendMessage("1|"+MessageToSend);
+                if (MessageToSend.Length < 300)
+                {
+                    connection.SendMessage("1|" + messageRegex.Replace(MessageToSend, " "));
+                }
+                else 
+                {
+                    ShowMessage("Message too long.");
+                }
 			}
 		}
 	}
