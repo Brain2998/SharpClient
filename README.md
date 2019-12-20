@@ -1,3 +1,3 @@
 # SharpClient
 
-Client for chat application
+Client for chat application with Mono and GTK#
